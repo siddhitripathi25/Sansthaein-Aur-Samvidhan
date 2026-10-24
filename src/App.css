@@ -1,0 +1,232 @@
+/* ============================================
+   App — Hero Landing Screen
+   ============================================ */
+
+.app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Hero Section ---- */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(19, 136, 8, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 60% 50%, rgba(255, 153, 51, 0.06) 0%, transparent 70%),
+    var(--bg-primary);
+}
+
+/* ---- Floating background glows ---- */
+
+.bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: float 8s ease-in-out infinite;
+}
+
+.bg-glow--1 {
+  width: 400px;
+  height: 400px;
+  background: var(--saffron);
+  top: -10%;
+  left: -5%;
+  animation-delay: 0s;
+}
+
+.bg-glow--2 {
+  width: 350px;
+  height: 350px;
+  background: var(--green);
+  bottom: -10%;
+  right: -5%;
+  animation-delay: 3s;
+}
+
+.bg-glow--3 {
+  width: 250px;
+  height: 250px;
+  background: var(--navy);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 5s;
+  opacity: 0.2;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
+/* ---- Hero content ---- */
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  padding: 40px;
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Ashoka Chakra ---- */
+
+.chakra {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border: 3px solid var(--navy);
+  border-radius: 50%;
+  margin-bottom: 8px;
+  animation: spinSlow 30s linear infinite;
+  box-shadow:
+    0 0 20px rgba(0, 0, 128, 0.3),
+    inset 0 0 20px rgba(0, 0, 128, 0.1);
+}
+
+.chakra__spoke {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 36px;
+  background: var(--navy);
+  transform-origin: top center;
+  opacity: 0.7;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Title ---- */
+
+.hero__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.1;
+}
+
+.hero__title-line {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.hero__title-line--saffron {
+  font-size: 3.2rem;
+  background: linear-gradient(135deg, var(--saffron) 0%, var(--saffron-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero__title-line--amp {
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.hero__title-line--green {
+  font-size: 3.2rem;
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---- Subtitle ---- */
+
+.hero__subtitle {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+  max-width: 420px;
+}
+
+/* ---- Badge ---- */
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 8px 20px;
+  background: rgba(19, 136, 8, 0.1);
+  border: 1px solid rgba(19, 136, 8, 0.25);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--green);
+  letter-spacing: 0.01em;
+}
+
+.hero__badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(19, 136, 8, 0.5); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(19, 136, 8, 0); }
+}
+
+/* ---- Tri-color bar ---- */
+
+.tricolor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 4px;
+}
+
+.tricolor__band {
+  flex: 1;
+}
+
+.tricolor__band--saffron {
+  background: var(--saffron);
+}
+
+.tricolor__band--white {
+  background: var(--white-pure);
+}
+
+.tricolor__band--green {
+  background: var(--green);
+}
