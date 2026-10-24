@@ -145,11 +145,24 @@ const pillars = [
 /* ---- Main App ---- */
 
 function App() {
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' | 'explorer'
   const [toastMessage, setToastMessage] = useState(null);
 
-  function handleCardClick(cardTitle) {
-    setToastMessage(`${cardTitle} — Coming soon!`);
-    setTimeout(() => setToastMessage(null), 2500);
+  function handleCardClick(card) {
+    if (card.id === 'explorer') {
+      setCurrentView('explorer');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setToastMessage(`${card.title} — Coming soon!`);
+      setTimeout(() => setToastMessage(null), 2500);
+    }
+  }
+
+  function handleNavigateHome() {
+    if (currentView !== 'dashboard') {
+      setCurrentView('dashboard');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   return (
@@ -157,7 +170,19 @@ function App() {
       {/* ===== Header ===== */}
       <header className="header" role="banner">
         <div className="header__inner">
-          <div className="header__brand">
+          <div
+            className={`header__brand ${currentView !== 'dashboard' ? 'header__brand--clickable' : ''}`}
+            role={currentView !== 'dashboard' ? 'button' : undefined}
+            tabIndex={currentView !== 'dashboard' ? 0 : undefined}
+            onClick={handleNavigateHome}
+            onKeyDown={(e) => {
+              if (currentView !== 'dashboard' && (e.key === 'Enter' || e.key === ' ')) {
+                e.preventDefault();
+                handleNavigateHome();
+              }
+            }}
+            title={currentView !== 'dashboard' ? 'Return to Dashboard' : undefined}
+          >
             <div className="header__emblem" aria-hidden="true">
               <span className="header__emblem-s">S</span>
               <span className="header__emblem-a">S</span>
@@ -179,66 +204,71 @@ function App() {
 
       {/* ===== Main Content ===== */}
       <main className="main" role="main">
-
-        {/* ---- Welcome section ---- */}
-        <section className="welcome" aria-labelledby="welcome-heading">
-          <div className="welcome__text">
-            <h2 id="welcome-heading" className="welcome__heading">
-              Understand the Constitution.<br />
-              <span className="welcome__heading-accent">One step at a time.</span>
-            </h2>
-            <p className="welcome__description">
-              Explore the institutions that govern India — the Legislature, Executive, and
-              Judiciary. Learn about constitutional provisions through guided exploration
-              and test your knowledge with interactive activities.
-            </p>
-          </div>
-          <PreambleIllustration />
-        </section>
-
-        {/* ---- Learning cards ---- */}
-        <section className="cards" aria-labelledby="cards-heading">
-          <h2 id="cards-heading" className="section-heading">Start Learning</h2>
-          <div className="cards__grid">
-            {learningCards.map((card) => (
-              <article
-                key={card.id}
-                className={`card card--${card.accent}`}
-                tabIndex="0"
-                role="button"
-                aria-label={`${card.title}: ${card.description}`}
-                onClick={() => handleCardClick(card.title)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleCardClick(card.title);
-                  }
-                }}
-              >
-                <div className="card__icon-wrap">
-                  <card.Icon />
-                </div>
-                <h3 className="card__title">{card.title}</h3>
-                <p className="card__description">{card.description}</p>
-                <span className="card__button">{card.buttonLabel}</span>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* ---- Quick facts / pillars ---- */}
-        <section className="pillars" aria-labelledby="pillars-heading">
-          <h2 id="pillars-heading" className="section-heading">Three Pillars of Democracy</h2>
-          <div className="pillars__grid">
-            {pillars.map((p) => (
-              <div key={p.id} className={`pillar pillar--${p.id}`}>
-                <PillarIcon type={p.id} />
-                <h3 className="pillar__name">{p.name}</h3>
-                <p className="pillar__desc">{p.description}</p>
+        {currentView === 'dashboard' ? (
+          <>
+            {/* ---- Welcome section ---- */}
+            <section className="welcome" aria-labelledby="welcome-heading">
+              <div className="welcome__text">
+                <h2 id="welcome-heading" className="welcome__heading">
+                  Understand the Constitution.<br />
+                  <span className="welcome__heading-accent">One step at a time.</span>
+                </h2>
+                <p className="welcome__description">
+                  Explore the institutions that govern India — the Legislature, Executive, and
+                  Judiciary. Learn about constitutional provisions through guided exploration
+                  and test your knowledge with interactive activities.
+                </p>
               </div>
-            ))}
-          </div>
-        </section>
+              <PreambleIllustration />
+            </section>
+
+            {/* ---- Learning cards ---- */}
+            <section className="cards" aria-labelledby="cards-heading">
+              <h2 id="cards-heading" className="section-heading">Start Learning</h2>
+              <div className="cards__grid">
+                {learningCards.map((card) => (
+                  <article
+                    key={card.id}
+                    className={`card card--${card.accent}`}
+                    tabIndex="0"
+                    role="button"
+                    aria-label={`${card.title}: ${card.description}`}
+                    onClick={() => handleCardClick(card)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleCardClick(card);
+                      }
+                    }}
+                  >
+                    <div className="card__icon-wrap">
+                      <card.Icon />
+                    </div>
+                    <h3 className="card__title">{card.title}</h3>
+                    <p className="card__description">{card.description}</p>
+                    <span className="card__button">{card.buttonLabel}</span>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            {/* ---- Quick facts / pillars ---- */}
+            <section className="pillars" aria-labelledby="pillars-heading">
+              <h2 id="pillars-heading" className="section-heading">Three Pillars of Democracy</h2>
+              <div className="pillars__grid">
+                {pillars.map((p) => (
+                  <div key={p.id} className={`pillar pillar--${p.id}`}>
+                    <PillarIcon type={p.id} />
+                    <h3 className="pillar__name">{p.name}</h3>
+                    <p className="pillar__desc">{p.description}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : (
+          <ConstitutionExplorer onBackToDashboard={handleNavigateHome} />
+        )}
       </main>
 
       {/* ===== Footer ===== */}
