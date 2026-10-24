@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import { ConstitutionExplorer } from './components/ConstitutionExplorer';
 
 /* ---- Small SVG-like CSS icon components ---- */
 
