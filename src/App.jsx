@@ -152,6 +152,9 @@ function App() {
     if (card.id === 'explorer') {
       setCurrentView('explorer');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (card.id === 'quiz') {
+      setCurrentView('quiz');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setToastMessage(`${card.title} — Coming soon!`);
       setTimeout(() => setToastMessage(null), 2500);
@@ -163,6 +166,11 @@ function App() {
       setCurrentView('dashboard');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  function handleNavigateToExplorer() {
+    setCurrentView('explorer');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   return (
@@ -204,7 +212,7 @@ function App() {
 
       {/* ===== Main Content ===== */}
       <main className="main" role="main">
-        {currentView === 'dashboard' ? (
+        {currentView === 'dashboard' && (
           <>
             {/* ---- Welcome section ---- */}
             <section className="welcome" aria-labelledby="welcome-heading">
@@ -266,8 +274,17 @@ function App() {
               </div>
             </section>
           </>
-        ) : (
+        )}
+
+        {currentView === 'explorer' && (
           <ConstitutionExplorer onBackToDashboard={handleNavigateHome} />
+        )}
+
+        {currentView === 'quiz' && (
+          <ConstitutionQuiz
+            onBackToDashboard={handleNavigateHome}
+            onGoToExplorer={handleNavigateToExplorer}
+          />
         )}
       </main>
 
