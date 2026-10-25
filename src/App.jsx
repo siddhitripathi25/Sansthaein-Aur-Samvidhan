@@ -2,6 +2,8 @@ import { useState } from 'react';
 import './App.css';
 import { ConstitutionExplorer } from './components/ConstitutionExplorer';
 import { ConstitutionQuiz } from './components/ConstitutionQuiz';
+import { MyProgress } from './components/MyProgress';
+import { loadProgress, recordCompletedQuizAttempt } from './utils/progressStorage';
 
 
 function BookIcon() {
@@ -145,8 +147,9 @@ const pillars = [
 
 
 function App() {
-  const [currentView, setCurrentView] = useState('dashboard'); 
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' | 'explorer' | 'quiz' | 'progress'
   const [toastMessage, setToastMessage] = useState(null);
+  const [progress, setProgress] = useState(() => loadProgress());
 
   function handleCardClick(card) {
     if (card.id === 'explorer') {
@@ -154,6 +157,9 @@ function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (card.id === 'quiz') {
       setCurrentView('quiz');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (card.id === 'progress') {
+      setCurrentView('progress');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       setToastMessage(`${card.title} — Coming soon!`);
@@ -171,6 +177,16 @@ function App() {
   function handleNavigateToExplorer() {
     setCurrentView('explorer');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleNavigateToQuiz() {
+    setCurrentView('quiz');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleRecordQuizComplete(attemptData) {
+    const updated = recordCompletedQuizAttempt(attemptData);
+    setProgress(updated);
   }
 
   return (
@@ -283,6 +299,16 @@ function App() {
         {currentView === 'quiz' && (
           <ConstitutionQuiz
             onBackToDashboard={handleNavigateHome}
+            onGoToExplorer={handleNavigateToExplorer}
+            onQuizComplete={handleRecordQuizComplete}
+          />
+        )}
+
+        {currentView === 'progress' && (
+          <MyProgress
+            progress={progress}
+            onBackToDashboard={handleNavigateHome}
+            onGoToQuiz={handleNavigateToQuiz}
             onGoToExplorer={handleNavigateToExplorer}
           />
         )}

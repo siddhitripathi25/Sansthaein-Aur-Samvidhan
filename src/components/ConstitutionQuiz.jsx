@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { QUIZ_QUESTIONS } from '../data/quizQuestions';
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D'];
 
-export function ConstitutionQuiz({ onBackToDashboard, onGoToExplorer }) {
+export function ConstitutionQuiz({ onBackToDashboard, onGoToExplorer, onQuizComplete }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [userAnswers, setUserAnswers] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
+  const hasRecordedCompletionRef = useRef(false);
 
   const totalQuestions = QUIZ_QUESTIONS.length;
   const currentQuestion = QUIZ_QUESTIONS[currentQuestionIndex];
@@ -52,16 +53,27 @@ export function ConstitutionQuiz({ onBackToDashboard, onGoToExplorer }) {
       setIsAnswerSubmitted(false);
     } else {
       setIsCompleted(true);
+      if (!hasRecordedCompletionRef.current) {
+        hasRecordedCompletionRef.current = true;
+        if (typeof onQuizComplete === 'function') {
+          onQuizComplete({
+            questionsAnswered: totalQuestions,
+            correctAnswers: correctAnswersCount,
+            scorePercentage,
+          });
+        }
+      }
     }
   }
 
-  // Reset all quiz state
+  // Reset all quiz state for a new attempt
   function handleTryAgain() {
     setCurrentQuestionIndex(0);
     setSelectedAnswerIndex(null);
     setIsAnswerSubmitted(false);
     setUserAnswers([]);
     setIsCompleted(false);
+    hasRecordedCompletionRef.current = false;
   }
 
   // Dynamic feedback message based on score percentage
