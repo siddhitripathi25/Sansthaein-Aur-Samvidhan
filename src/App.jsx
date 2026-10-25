@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import { ConstitutionExplorer } from './components/ConstitutionExplorer';
+import { ConstitutionQuiz } from './components/ConstitutionQuiz';
 
-/* ---- Small SVG-like CSS icon components ---- */
 
 function BookIcon() {
   return (
@@ -142,10 +142,10 @@ const pillars = [
   },
 ];
 
-/* ---- Main App ---- */
+
 
 function App() {
-  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' | 'explorer'
+  const [currentView, setCurrentView] = useState('dashboard'); 
   const [toastMessage, setToastMessage] = useState(null);
 
   function handleCardClick(card) {
