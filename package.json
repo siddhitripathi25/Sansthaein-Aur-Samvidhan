@@ -7,21 +7,74 @@
     "dev": "concurrently --kill-others \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
     "dev:vite": "vite",
     "dev:electron": "cross-env NODE_ENV=development electron .",
-    "build": "vite build"
+    "build": "vite build",
+    "package:mac": "vite build && electron-builder --mac --arm64",
+    "dist": "npm run package:mac",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build --target aarch64-apple-darwin --bundles dmg"
+  },
+  "build": {
+    "appId": "com.sansthaeinaursamvidhan.app",
+    "productName": "Sansthaein Aur Samvidhan",
+    "compression": "maximum",
+    "electronLanguages": [
+      "en"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/main.cjs",
+      "!**/node_modules/**",
+      "!**/*.map"
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.education",
+      "identity": null,
+      "electronLanguages": [
+        "en"
+      ]
+    },
+    "dmg": {
+      "title": "Sansthaein Aur Samvidhan",
+      "format": "UDBZ",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "dependencies": {
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1"
-  },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.12.4",
     "@vitejs/plugin-react": "^6.1.2",
     "concurrently": "^10.0.6",
     "cross-env": "^10.1.0",
     "electron": "^45.0.0",
+    "electron-builder": "^26.18.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "vite": "^8.3.5",
     "wait-on": "^9.5.1"
   }
